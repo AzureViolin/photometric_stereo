@@ -1,0 +1,9 @@
+data02_tile1 data02
+data03_tile2 small
+data04_rope data04
+data05_snail data05
+data06_egypt data06
+data07_toycar data07
+data08_teapot data08
+data09_package data09
+data10_bear data10
