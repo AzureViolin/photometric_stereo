@@ -2,6 +2,7 @@ from matplotlib import pyplot
 from mpl_toolkits.mplot3d import Axes3D
 import csv
 import math
+import numpy as np
 
 class LightVector():
     def __init__(self):
@@ -39,6 +40,23 @@ class LightVector():
             pyplot.show()
             input('press enter to continue')
             fig.clf()
+
+    def dome(self, r, num_of_points):
+        area = 4 * math.pi * r * r / (2 * num_of_points)
+        d = math.sqrt(area)
+        Mv = math.floor(math.pi * r / d)
+        dv = math.pi * r / Mv
+        dphi = area / dv
+
+        for m in range(0,math.floor(Mv / 2)):
+            v = math.pi * (m + 0.5) / Mv
+            Mphi = math.floor (2 * math.pi * math.sin(v) * r / dphi)
+            for n in range(0, Mphi):
+                phi = 2 * math.pi * n / Mphi
+                x = r * math.sin(v) * math.cos(phi)
+                y = r * math.sin(v) * math.sin(phi)
+                z = r * math.cos(v)
+
 
     def icosahegron(self):
         self.t = (1 + math.sqrt(5))/2
@@ -123,6 +141,9 @@ class LightVector():
         ax = Axes3D(fig)
         ax.scatter(self.x,self.y,self.z)
         pyplot.show()
+
+        # to keep using this method requires build a mesh datastructure
+        # which I prefer not to do at this moment.
 
 
 if __name__=="__main__":
