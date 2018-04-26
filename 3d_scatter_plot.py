@@ -27,7 +27,7 @@ class LightVector():
         print('show dataset lightvecs: ', i)
         i=i-2
         file_name = '../'+self.dataset_names[i]+'/'+self.dataset_nums[i]+'/lightvec.txt'
-        file_name = './lightvec.txt'
+        #file_name = './lightvec.txt'
         print(file_name)
         with open(file_name) as csvfile:
             readCSV = csv.reader(csvfile, delimiter=' ')
@@ -62,7 +62,7 @@ class LightVector():
     def dome(self, r, num_of_points):
         area = 4 * math.pi * r * r / (2 * num_of_points)
         d = math.sqrt(area)
-        self.dome_point_max_dist_from_each_other = d
+        self.dome_point_max_dist_from_each_other = d / 2.0
         Mv = math.floor(math.pi * r / d)
         dv = math.pi * r / Mv
         dphi = area / dv
@@ -92,6 +92,7 @@ class LightVector():
         print('lightvecs.shape: ',self.lightvecs.shape)
         #for lightvec in lightvecs:
         #    for dome_point in dome_points:
+        self.resampled_points = []
         len_dome_points = self.dome_points.shape[0]
         len_lightvecs = self.lightvecs.shape[0]
         shortest_dist = self.dome_point_max_dist_from_each_other
@@ -108,18 +109,19 @@ class LightVector():
                     found = True
 
             if found == True :
-                print('current i,j: ',i,j)
-                print('shortest_lightvec_num: ',shortest_lightvec_num)
-                print('shortest_dome_point_num: ',shortest_dome_point_num)
-                print('shortest_dist: ',shortest_dist)
+                #print('current i,j: ',i,j)
+                #print('shortest_dome_point_num: ',shortest_dome_point_num)
+                #print('shortest_lightvec_num: ',shortest_lightvec_num)
+                #print('shortest_dist: ',shortest_dist)
                 #print('max_dist: ',self.dome_point_max_dist_from_each_other)
+                self.resampled_points.append([shortest_lightvec_num + 1,shortest_dome_point_num])
                 found = False
                 shortest_lightvec_num = -1
                 shortest_dome_point_num = -1
                 shortest_dist = self.dome_point_max_dist_from_each_other
-
-
-
+        #print(self.resampled_points)
+        #print(np.asarray(self.resampled_points))
+        print('resammpled_points shape: ',np.asarray(self.resampled_points).shape)
 
 
     def icosahegron(self):
@@ -201,11 +203,9 @@ class LightVector():
         length = kk[0] ** 2 + kk[1] ** 2 + kk[2] ** 2
         print(length)
 
-
 if __name__=="__main__":
     obj = LightVector()
-    #obj.dome(1.0,310)
-    obj.dome(1.0,31)
-    obj.read_lightvecs(2)
-    obj.resample()
     #obj.icosahegron()
+    obj.dome(1.0,310) # 310 is the magic number here to get 306 sample points
+    obj.read_lightvecs(2) # 2 means dataset2. works from 2-10.
+    obj.resample() # obj.resampled_points is a 2xN array, with the first column being the resampled picture ID
