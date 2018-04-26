@@ -123,89 +123,8 @@ class LightVector():
         #print(np.asarray(self.resampled_points))
         print('resammpled_points shape: ',np.asarray(self.resampled_points).shape)
 
-
-    def icosahegron(self):
-        self.t = (1 + math.sqrt(5))/2
-        self.a = math.sqrt(self.t)/math.pow(5,1/4)
-        self.b = 1/(math.sqrt(self.t) * math.pow(5,1/4))
-        self.c = self.a + 2 * self.b
-        self.d = self.a + self.b
-        self.cc = 1/self.b
-        self.dd = math.pow(self.t,3/2)/math.pow(5,1/4)
-        a = self.a
-        b = self.b
-        c = self.c
-        d = self.d
-        self.original_12_vertices = np.array([
-                [ 0, -a, -b],
-                [ 0, -a,  b],
-                [ 0,  a, -b],
-                [ 0,  a,  b],
-                [-b,  0, -a],
-                [-b,  0,  a],
-                [ b,  0, -a],
-                [ b,  0,  a],
-                [-a, -b,  0],
-                [-a,  b,  0],
-                [ a, -b,  0],
-                [ a,  b,  0],
-                ])
-        self.original_20_face_mid_points = np.array([
-                [-d, -d, -d],
-                [-d, -d,  d],
-                [-d,  d, -d],
-                [-d,  d,  d],
-                [ d, -d, -d],
-                [ d, -d,  d],
-                [ d,  d, -d],
-                [ d,  d,  d],
-                [ 0, -a, -c],
-                [ 0, -a,  c],
-                [ 0,  a, -c],
-                [ 0,  a,  c],
-                [-c,  0, -a],
-                [-c,  0,  a],
-                [ c,  0, -a],
-                [ c,  0,  a],
-                [-a, -c,  0],
-                [-a,  c,  0],
-                [ a, -c,  0],
-                [ a,  c,  0],
-                ])
-        self.original_20_face_mid_points = self.original_20_face_mid_points / 3.0
-        print('t =',self.t)
-        print('a =',self.a)
-        print('b =',self.b)
-        print('c =',self.c)
-        print('d =',self.d)
-        print('cc =',self.cc)
-        print('dd =',self.dd)
-        print(self.original_20_face_mid_points)
-
-        self.clear_xyz()
-        for row in self.original_20_face_mid_points:
-            self.x.append(float(row[0]))
-            self.y.append(float(row[1]))
-            self.z.append(float(row[2]))
-
-        self.plot()
-        self.clear_xyz()
-        for row in self.original_12_vertices:
-            self.x.append(float(row[0]))
-            self.y.append(float(row[1]))
-            self.z.append(float(row[2]))
-        print(self.original_12_vertices)
-        self.plot()
-
-        # to keep using this method requires build a mesh datastructure
-        # which I prefer not to do at this moment.
-        kk = self.original_20_face_mid_points[0]
-        length = kk[0] ** 2 + kk[1] ** 2 + kk[2] ** 2
-        print(length)
-
 if __name__=="__main__":
     obj = LightVector()
-    #obj.icosahegron()
     obj.dome(1.0,310) # 310 is the magic number here to get 306 sample points
     obj.read_lightvecs(2) # 2 means dataset2. works from 2-10.
     obj.resample() # obj.resampled_points is a 2xN array, with the first column being the resampled picture ID
