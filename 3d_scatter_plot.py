@@ -70,7 +70,7 @@ class LightVector():
         b = self.b
         c = self.c
         d = self.d
-        self.original_12_vertices = [
+        self.original_12_vertices = np.array([
                 [ 0, -a, -b],
                 [ 0, -a,  b],
                 [ 0,  a, -b],
@@ -83,8 +83,8 @@ class LightVector():
                 [-a,  b,  0],
                 [ a, -b,  0],
                 [ a,  b,  0],
-                ]
-        self.original_20_face_mid_points = [
+                ])
+        self.original_20_face_mid_points = np.array([
                 [-d, -d, -d],
                 [-d, -d,  d],
                 [-d,  d, -d],
@@ -105,7 +105,8 @@ class LightVector():
                 [-a,  c,  0],
                 [ a, -c,  0],
                 [ a,  c,  0],
-                ]
+                ])
+        self.original_20_face_mid_points = self.original_20_face_mid_points / 3.0
         print('t =',self.t)
         print('a =',self.a)
         print('b =',self.b)
@@ -118,7 +119,6 @@ class LightVector():
         self.x.clear()
         self.y.clear()
         self.z.clear()
-        fig.clf()
         for row in self.original_20_face_mid_points:
             self.x.append(float(row[0]))
             self.y.append(float(row[1]))
@@ -136,17 +136,23 @@ class LightVector():
             self.x.append(float(row[0]))
             self.y.append(float(row[1]))
             self.z.append(float(row[2]))
-        print(len(self.x))
+        print(self.original_12_vertices)
         fig = pyplot.figure()
         ax = Axes3D(fig)
         ax.scatter(self.x,self.y,self.z)
         pyplot.show()
+        input('press Enter to end:')
+        fig.clf()
 
         # to keep using this method requires build a mesh datastructure
         # which I prefer not to do at this moment.
+        kk = self.original_20_face_mid_points[0]
+        length = kk[0] ** 2 + kk[1] ** 2 + kk[2] ** 2
+        print(length)
 
 
 if __name__=="__main__":
     obj = LightVector()
-    obj.plot()
-    #obj.icosahegron()
+    #obj.plot()
+    obj.icosahegron()
+    #obj.dome(r,num)
