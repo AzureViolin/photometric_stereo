@@ -47,6 +47,12 @@ class LightVector():
         Mv = math.floor(math.pi * r / d)
         dv = math.pi * r / Mv
         dphi = area / dv
+        self.dome_points = np.array([])
+        points = []
+
+        self.x.clear()
+        self.y.clear()
+        self.z.clear()
 
         for m in range(0,math.floor(Mv / 2)):
             v = math.pi * (m + 0.5) / Mv
@@ -56,6 +62,22 @@ class LightVector():
                 x = r * math.sin(v) * math.cos(phi)
                 y = r * math.sin(v) * math.sin(phi)
                 z = r * math.cos(v)
+                points.append([x,y,z])
+                self.x.append(x)
+                self.y.append(y)
+                self.z.append(z)
+
+        self.dome_points = np.asarray(points)
+        #print(self.dome_points)
+        print(self.dome_points.shape)
+
+        fig = pyplot.figure()
+        ax = Axes3D(fig)
+        ax.scatter(self.x,self.y,self.z)
+        pyplot.show()
+        input('press enter to continue')
+        fig.clf()
+
 
 
     def icosahegron(self):
@@ -154,5 +176,5 @@ class LightVector():
 if __name__=="__main__":
     obj = LightVector()
     #obj.plot()
-    obj.icosahegron()
-    #obj.dome(r,num)
+    #obj.icosahegron()
+    obj.dome(1.0,310)
