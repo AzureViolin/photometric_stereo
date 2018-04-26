@@ -14,6 +14,7 @@ import pickle
 import cv2
 import matplotlib.pyplot as plt
 from scipy.stats import rankdata
+import csv
 
 class DenominatorFinder():
     def __init__(self, name_list, root_path, img_size=[224,224]):
@@ -23,16 +24,15 @@ class DenominatorFinder():
         self.img_size = img_size
         self.imgs = np.zeros([self.name_len]+self.img_size, dtype=np.int32)
         self.ranks = np.zeros([self.name_len]+self.img_size, dtype=np.int32)
-        self.load_image()
 
     def load_image(self, idx=None):
         if idx:
-            img = np.array(Image.open(self.root_path+str(self.name_list[self.denominator_idx]).zfill(4)+".bmp").convert('L'))
+            img = np.array(Image.open(os.path.join(self.root_path, "image"+str(self.name_list[self.denominator_idx]).zfill(4)+".bmp")).convert('L'))
             return img
         else:
             for i,item in enumerate(self.name_list):
-                img = np.array(Image.open(self.root_path+str(item).zfill(4)+".bmp").convert('LA'))
-                self.imgs[i,:,:] = img[:,:,0]
+                img = np.array(Image.open(os.path.join(self.root_path, "image"+str(item).zfill(4)+".bmp")).convert('L'))
+                self.imgs[i,:,:] = img[:,:]
 
     def denominatorfind(self):
         imgs_flatten = self.imgs.reshape(self.name_len, -1)
@@ -47,16 +47,59 @@ class DenominatorFinder():
         self.denominator_idx = np.argmax((rank_70_mean<self.name_len*0.9)*rank_70_counts)
         return self.denominator_idx, self.name_list[self.denominator_idx]
 
+    def read_lightvecs(self):
+        lightvecs = []
+        self.x = []
+        self.y = []
+        self.z = []
+        with open(os.path.join(self.root_path, 'lightvec.txt'),"r") as csvfile:
+            readCSV = csv.reader(csvfile, delimiter=' ')
+            for (i, row) in enumerate(readCSV):
+                x = float(row[0])
+                y = float(row[1])
+                z = float(row[2])
+                self.x.append(x)
+                self.y.append(y)
+                self.z.append(z)
+                lightvecs.append([x,y,z])
+
+        self.lightvecs = np.array(lightvecs)
+
+    def matrix_build(self, denominator_name, denominator_idx):
+        self.mat = np.zeros((self.img_size[0], self.img_size[1], self.name_len-1, 3), dtype=np.float32)
+        self.normal_mat = np.zeros((self.img_size[0], self.img_size[1], 3), dtype=np.float32)
+        l2 = self.lightvecs[denominator_name]
+        ratio_list = list(self.name_list[:])
+        ratio_list.remove(denominator_name)
+        for row in range(self.img_size[0]):
+            for col in range(self.img_size[1]):
+                I2 = self.imgs[denominator_idx][row][col]
+                for (i, item) in enumerate(ratio_list):
+                    #if item != denominator_name:
+                    I1 = self.imgs[i][row][col]
+                    l1 = self.lightvecs[item]
+                    self.mat[row][col][i][:]=I1*l2-I2*l1
+                        #self.mat[row][col][i][1]=I1*l2[1]-I2*l1[1]
+                        #self.mat[row][col][i][2]=
+                    self.normal_mat[row][col] = np.linalg.svd(self.mat[row][col])[2][2]
+        print (self.normal_mat)
 
 if __name__=="__main__":
     name_list_path="./resample_list.pickle"
-    root_path="../data02_tile1/data02/image"
+    root_path="../data02_tile1/data02/"
     img_size = [110, 124]
     with open(name_list_path,"rb") as f:
         name_list = np.array(pickle.load(f))[:,0]
 
     obj = DenominatorFinder(name_list, root_path, img_size=img_size)
-    idx, name = obj.denominatorfind()
-    print("denominator name: ", name)
-    plt.imshow(obj.load_image(idx))
-    plt.show()
+    obj.load_image()
+
+    ##==== find and show denominator imagbe=====
+    #idx, name = obj.denominatorfind()
+    #print("denominator name: ", name)
+    #plt.imshow(obj.load_image(idx))
+    #plt.show()
+
+    ##==== initial normal vector estimation=====
+    obj.read_lightvecs()
+    obj.matrix_build(1718, 5)
