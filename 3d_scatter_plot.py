@@ -19,13 +19,12 @@ class LightVector():
         self.y = []
         self.z = []
 
-    def read_lightvec(self,dataset_num):
-        lightvec = []
+    def read_lightvecs(self,dataset_num):
+        lightvecs = []
         i = dataset_num
         #for i in range(2,11):
-        lightvec.clear()
-        self.clear_xyz()
-        print('show dataset lightvec: ', i)
+        #self.clear_xyz()
+        print('show dataset lightvecs: ', i)
         i=i-2
         file_name = '../'+self.dataset_names[i]+'/'+self.dataset_nums[i]+'/lightvec.txt'
         file_name = './lightvec.txt'
@@ -39,13 +38,13 @@ class LightVector():
                 self.x.append(x)
                 self.y.append(y)
                 self.z.append(z)
-                lightvec.append([x,y,z])
+                lightvecs.append([x,y,z])
         #self.plot()
-        #print('lightvec:\n',lightvec)
+        #print('lightvecs:\n',lightvecs)
 
-        self.lightvec = np.asarray(lightvec)
-        print('lightvec.shape: ',self.lightvec.shape)
-        print(self.lightvec)
+        self.lightvecs = np.asarray(lightvecs)
+        print('lightvecs.shape: ',self.lightvecs.shape)
+        #print(self.lightvecs)
 
     def clear_xyz(self):
         self.x.clear()
@@ -63,6 +62,7 @@ class LightVector():
     def dome(self, r, num_of_points):
         area = 4 * math.pi * r * r / (2 * num_of_points)
         d = math.sqrt(area)
+        self.dome_point_max_dist_from_each_other = d
         Mv = math.floor(math.pi * r / d)
         dv = math.pi * r / Mv
         dphi = area / dv
@@ -83,9 +83,44 @@ class LightVector():
                 self.z.append(z)
 
         self.dome_points = np.asarray(points)
-        #print(self.dome_points)
         print('dome_points shape: ',self.dome_points.shape)
+        #print(self.dome_points)
         #self.plot()
+
+    def resample(self):
+        print('dome_points.shape: ',self.dome_points.shape)
+        print('lightvecs.shape: ',self.lightvecs.shape)
+        #for lightvec in lightvecs:
+        #    for dome_point in dome_points:
+        len_dome_points = self.dome_points.shape[0]
+        len_lightvecs = self.lightvecs.shape[0]
+        shortest_dist = self.dome_point_max_dist_from_each_other
+        shortest_lightvec_num = -1
+        shortest_dome_point_num = -1
+        found = False
+        for i in range(0,len_dome_points):
+            for j in range(0,len_lightvecs):
+                dist = np.linalg.norm(self.lightvecs[j]-self.dome_points[i])
+                if dist < shortest_dist :
+                    shortest_dome_point_num = i
+                    shortest_lightvec_num = j
+                    shortest_dist = dist
+                    found = True
+
+            if found == True :
+                print('current i,j: ',i,j)
+                print('shortest_lightvec_num: ',shortest_lightvec_num)
+                print('shortest_dome_point_num: ',shortest_dome_point_num)
+                print('shortest_dist: ',shortest_dist)
+                #print('max_dist: ',self.dome_point_max_dist_from_each_other)
+                found = False
+                shortest_lightvec_num = -1
+                shortest_dome_point_num = -1
+                shortest_dist = self.dome_point_max_dist_from_each_other
+
+
+
+
 
     def icosahegron(self):
         self.t = (1 + math.sqrt(5))/2
@@ -169,6 +204,8 @@ class LightVector():
 
 if __name__=="__main__":
     obj = LightVector()
-    obj.dome(1.0,310)
-    obj.read_lightvec(2)
+    #obj.dome(1.0,310)
+    obj.dome(1.0,31)
+    obj.read_lightvecs(2)
+    obj.resample()
     #obj.icosahegron()
