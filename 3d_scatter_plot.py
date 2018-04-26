@@ -122,9 +122,14 @@ class LightVector():
         #print(self.resampled_points)
         #print(np.asarray(self.resampled_points))
         print('resammpled_points shape: ',np.asarray(self.resampled_points).shape)
+        return self.resampled_points
 
 if __name__=="__main__":
     obj = LightVector()
     obj.dome(1.0,310) # 310 is the magic number here to get 306 sample points
     obj.read_lightvecs(2) # 2 means dataset2. works from 2-10.
-    obj.resample() # obj.resampled_points is a 2xN array, with the first column being the resampled picture ID
+    sample_list = obj.resample() # obj.resampled_points is a 2xN array, with the first column being the resampled picture ID
+    print (sample_list)
+    import pickle
+    with open("resample_list.pickle", "wb") as f:
+        pickle.dump(sample_list, f)
