@@ -1,3 +1,10 @@
+function create_surface(dataset_num)
+% Usage: create_surface('2')
+% Parameter can be any number in STRING from '2' to '10'
+
+normal = load(strcat('./normal_dataset',dataset_num,'.mat'),strcat('normal_dataset',dataset_num));
+normal = normal.(strcat('normal_dataset',dataset_num));
+
 [row, column, ~] = size(normal);
 slant=reshape(acos(reshape(normal(:,:,3),row*column,1)),row,column);
 tn=normr(reshape(normal(:,:,1:2),row*column,2));
@@ -12,7 +19,7 @@ surf(recsurf);
 
 X = deal(1:column);
 Y = deal(1:row);
-stlwrite('surf.stl',X,Y,recsurf,'mode','ascii')
+stlwrite(strcat('dataset',dataset_num,'_surf.stl'),X,Y,recsurf,'mode','ascii')
 % 
 % figure
 % surf(ones(row,column),'VertexNormals',normal,'EdgeColor','none');
