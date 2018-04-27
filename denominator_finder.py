@@ -80,12 +80,18 @@ class DenominatorFinder():
                 for (i, item) in enumerate(ratio_list):
                     #print('i = ', i, ' item = ', item)
                     #if item != denominator_name:
-                    I1 = self.imgs[i][row][col]
+                    if i<denominator_idx:
+                        j=i
+                    else:
+                        j=i+1
+                    I1 = self.imgs[j][row][col]
                     l1 = self.lightvecs[item]
                     self.mat[row][col][i][:]=I1*l2-I2*l1
                         #self.mat[row][col][i][1]=I1*l2[1]-I2*l1[1]
                         #self.mat[row][col][i][2]=
-                    self.normal_mat[row][col] = np.linalg.svd(self.mat[row][col])[2][2]
+                    U,S,V = np.linalg.svd(self.mat[row][col])
+                    #print (V.shape)
+                    self.normal_mat[row][col] = V[2]
         #print (self.normal_mat)
         #with open("normal_mat.pickle", "wb") as output_file:
         #    pickle.dump(self.normal_mat, output_file)
@@ -112,5 +118,5 @@ if __name__=="__main__":
     print(obj.name_list)
     print(obj.name_len)
     obj.matrix_build(1718, 5)
-    import scipy.io
-    scipy.io.savemat('./normal.mat',mdict={'normal':obj.normal_mat})
+    #import scipy.io
+    #scipy.io.savemat('./normal.mat',mdict={'normal':obj.normal_mat})

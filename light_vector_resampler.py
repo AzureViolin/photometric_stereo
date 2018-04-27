@@ -128,7 +128,7 @@ class LightVectorResampler():
         return self.resampled_points
 
 if __name__=="__main__":
-    dataset_num = 10
+    dataset_num = 2
     sample_points_num = 310
 
     obj = LightVectorResampler(dataset_num)
