@@ -4,8 +4,8 @@ import csv
 import math
 import numpy as np
 
-class LightVector():
-    def __init__(self):
+class LightVectorResampler():
+    def __init__(self,dataset_num):
         self.dataset_names = []
         self.dataset_nums = []
         with open('./dataset_name_list.txt') as dataset_name_file:
@@ -13,8 +13,9 @@ class LightVector():
             for row in read_names:
                 self.dataset_names.append(row[0])
                 self.dataset_nums.append(row[1])
-        print(self.dataset_names)
-        print(self.dataset_nums)
+        #print(self.dataset_names)
+        #print(self.dataset_nums)
+        print('=============== current dataset: ',self.dataset_names[dataset_num-2],' ================')
         self.x = []
         self.y = []
         self.z = []
@@ -26,7 +27,8 @@ class LightVector():
         #self.clear_xyz()
         print('show dataset lightvecs: ', i)
         i=i-2
-        file_name = '../'+self.dataset_names[i]+'/'+self.dataset_nums[i]+'/lightvec.txt'
+        self.dataset_path = '../'+self.dataset_names[i]+'/'+self.dataset_nums[i]+'/'
+        file_name = self.dataset_path+'lightvec.txt'
         #file_name = './lightvec.txt'
         print(file_name)
         with open(file_name) as csvfile:
@@ -43,7 +45,7 @@ class LightVector():
         #print('lightvecs:\n',lightvecs)
 
         self.lightvecs = np.asarray(lightvecs)
-        print('lightvecs.shape: ',self.lightvecs.shape)
+        #print('lightvecs.shape: ',self.lightvecs.shape)
         #print(self.lightvecs)
 
     def clear_xyz(self):
@@ -83,7 +85,7 @@ class LightVector():
                 self.z.append(z)
 
         self.dome_points = np.asarray(points)
-        print('dome_points shape: ',self.dome_points.shape)
+        #print('dome_points shape: ',self.dome_points.shape)
         #print(self.dome_points)
         #self.plot()
 
@@ -114,7 +116,8 @@ class LightVector():
                 #print('shortest_lightvec_num: ',shortest_lightvec_num)
                 #print('shortest_dist: ',shortest_dist)
                 #print('max_dist: ',self.dome_point_max_dist_from_each_other)
-                self.resampled_points.append([shortest_lightvec_num + 1,shortest_dome_point_num])
+                #self.resampled_points.append([shortest_lightvec_num + 1,shortest_dome_point_num])
+                self.resampled_points.append(shortest_lightvec_num + 1)
                 found = False
                 shortest_lightvec_num = -1
                 shortest_dome_point_num = -1
@@ -125,11 +128,14 @@ class LightVector():
         return self.resampled_points
 
 if __name__=="__main__":
-    obj = LightVector()
-    obj.dome(1.0,310) # 310 is the magic number here to get 306 sample points
-    obj.read_lightvecs(2) # 2 means dataset2. works from 2-10.
+    dataset_num = 10
+    sample_points_num = 310
+
+    obj = LightVectorResampler(dataset_num)
+    obj.dome(1.0,sample_points_num) # 310 is the magic number here to get 306 sample points
+    obj.read_lightvecs(dataset_num) # 2 means dataset2. works from 2-10.
     sample_list = obj.resample() # obj.resampled_points is a 2xN array, with the first column being the resampled picture ID
-    print (sample_list)
+    print ('resampled_list: \n',np.asarray(sample_list))
     import pickle
     with open("resample_list.pickle", "wb") as f:
         pickle.dump(sample_list, f)

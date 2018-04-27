@@ -14,17 +14,17 @@ import pickle
 import cv2
 import matplotlib.pyplot as plt
 from scipy.stats import rankdata
-import scipy.io
 import csv
 
 class DenominatorFinder():
-    def __init__(self, name_list, root_path, img_size=[224,224]):
+    def __init__(self, name_list, root_path, dataset_name, img_size=[224,224]):
         self.name_list = name_list
         self.root_path = root_path
         self.name_len = len(name_list)
         self.img_size = img_size
         self.imgs = np.zeros([self.name_len]+self.img_size, dtype=np.int32)
         self.ranks = np.zeros([self.name_len]+self.img_size, dtype=np.int32)
+        self.dataset_name = dataset_name
 
     def load_image(self, idx=None):
         if idx:
@@ -73,7 +73,7 @@ class DenominatorFinder():
         ratio_list = list(self.name_list[:])
         ratio_list.remove(denominator_name)
         for row in range(self.img_size[0]):
-            print('row = ', row)
+            print('Computing SVD for '+self.dataset_name+' row ', row)
             for col in range(self.img_size[1]):
                 #print('col = ', col)
                 I2 = self.imgs[denominator_idx][row][col]
@@ -89,21 +89,21 @@ class DenominatorFinder():
         #print (self.normal_mat)
         #with open("normal_mat.pickle", "wb") as output_file:
         #    pickle.dump(self.normal_mat, output_file)
-        scipy.io.savemat('./normal.mat',mdict={'normal':normal_mat})
 
 if __name__=="__main__":
     name_list_path="./resample_list.pickle"
     root_path="../data02_tile1/data02/"
     img_size = [110, 124]
     with open(name_list_path,"rb") as f:
-        name_list = np.array(pickle.load(f))[:,0]
+        name_list = np.array(pickle.load(f))
 
-    obj = DenominatorFinder(name_list, root_path, img_size=img_size)
+
+    obj = DenominatorFinder(name_list, root_path, dataset_name = 'data02_tile1', img_size=img_size)
     obj.load_image()
 
     ##==== find and show denominator imagbe=====
-    #idx, name = obj.denominatorfind()
-    #print("denominator name: ", name)
+    idx, name = obj.denominatorfind()
+    print("denominator name: ", name)
     #plt.imshow(obj.load_image(idx))
     #plt.show()
 
@@ -112,3 +112,5 @@ if __name__=="__main__":
     print(obj.name_list)
     print(obj.name_len)
     obj.matrix_build(1718, 5)
+    import scipy.io
+    scipy.io.savemat('./normal.mat',mdict={'normal':obj.normal_mat})
