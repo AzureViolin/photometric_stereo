@@ -14,6 +14,7 @@ import pickle
 import cv2
 import matplotlib.pyplot as plt
 from scipy.stats import rankdata
+import scipy.io
 import csv
 
 class DenominatorFinder():
@@ -72,9 +73,12 @@ class DenominatorFinder():
         ratio_list = list(self.name_list[:])
         ratio_list.remove(denominator_name)
         for row in range(self.img_size[0]):
+            print('row = ', row)
             for col in range(self.img_size[1]):
+                #print('col = ', col)
                 I2 = self.imgs[denominator_idx][row][col]
                 for (i, item) in enumerate(ratio_list):
+                    #print('i = ', i, ' item = ', item)
                     #if item != denominator_name:
                     I1 = self.imgs[i][row][col]
                     l1 = self.lightvecs[item]
@@ -82,7 +86,10 @@ class DenominatorFinder():
                         #self.mat[row][col][i][1]=I1*l2[1]-I2*l1[1]
                         #self.mat[row][col][i][2]=
                     self.normal_mat[row][col] = np.linalg.svd(self.mat[row][col])[2][2]
-        print (self.normal_mat)
+        #print (self.normal_mat)
+        #with open("normal_mat.pickle", "wb") as output_file:
+        #    pickle.dump(self.normal_mat, output_file)
+        scipy.io.savemat('./normal.mat',mdict={'normal':normal_mat})
 
 if __name__=="__main__":
     name_list_path="./resample_list.pickle"
@@ -102,4 +109,6 @@ if __name__=="__main__":
 
     ##==== initial normal vector estimation=====
     obj.read_lightvecs()
+    print(obj.name_list)
+    print(obj.name_len)
     obj.matrix_build(1718, 5)
