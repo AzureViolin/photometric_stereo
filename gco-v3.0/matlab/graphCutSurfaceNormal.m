@@ -77,8 +77,9 @@ for i = 1:sIco
     for j = 1:sIco
         Sij = Icosahedron(i, :) - Icosahedron(j, :);
         Sij = sqrt(Sij*Sij');
-        K = 1 + epsilon - exp(-(2-Sij)/sigma^2);
-        labelcost(i, j) = lambda*K*Sij;
+        %K = 1 + epsilon - exp(-(2-Sij)/sigma^2);
+        %labelcost(i, j) = lambda*K*Sij;
+        labelcost(i, j) = Sij;
     end
 end
 

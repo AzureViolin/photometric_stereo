@@ -12,10 +12,25 @@ for i = 1:M
     end
 end
 recsurf = shapeletsurf(slant, tilt, 6, 3, 2);
-surface(2*recsurf);
-[x_grid, y_grid] = meshgrid(1:M,1:N);
-figure
-scatter3(x_grid(:), y_grid(:), recsurf(:))
+
+%[x_grid, y_grid] = meshgrid(1:N,1:M);
+%display(x_grid);
+%display(y_grid);
+%display(recsurf);
+figure(2)
+surface(recsurf);
+view(3)
+%figure
+%x_grid;
+%y_grid;
+%scatter3(x_grid(:), y_grid(:), recsurf(:))
+
+%figure
+%surface(X, 2*recsurf);
+
+%figure
+%x_grid;
+%y_grid;
 
 
 end
