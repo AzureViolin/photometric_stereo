@@ -9,31 +9,6 @@ normal = normal.(strcat('normal_dataset',dataset_num));
 slant=reshape(acos(reshape(normal(:,:,3),row*column,1)),row,column);
 tn=normr(reshape(normal(:,:,1:2),row*column,2));
 tilt=reshape(acos(tn(:,1)),row,column);
-
-view_direction = [0 0 1];
-for i = 1:row
-    i
-    for j = 1:column
-        j
-%         norm_at_pixel = (normal(row,column,:),1,3);
-        if (normal(row,column,3) < 0)
-            't'
-            normal(row,column,1) = -normal(row,column,1);
-            normal(row,column,2) = -normal(row,column,2);
-            normal(row,column,3) = -normal(row,column,3);
-%         if slant(i,j) > pi/2
-%             slant(i,j) = pi - slant(i,j);
-%         end
-        end
-    end
-end
-
-re_norm = reshape(normal(:,:,:),row*column,3);
-
-
-
-
-
 figure(2),needleplotst(slant,tilt,5,2), axis('off')
 
 %   opt can be the string:

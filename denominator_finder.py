@@ -67,16 +67,25 @@ class DenominatorFinder():
         self.lightvecs = np.array(lightvecs)
 
     def matrix_build(self, denominator_name, denominator_idx):
-        self.mat = np.zeros((self.img_size[0], self.img_size[1], self.name_len-1, 3), dtype=np.float32)
+        #self.mat = np.zeros((self.img_size[0], self.img_size[1], self.name_len-1, 3), dtype=np.float32)
+        self.mat = np.zeros((self.img_size[0], self.img_size[1], self.name_len, 3), dtype=np.float32)
         self.normal_mat = np.zeros((self.img_size[0], self.img_size[1], 3), dtype=np.float32)
         l2 = self.lightvecs[denominator_name]
+        #print ('l2: ',l2)
         ratio_list = list(self.name_list[:])
-        ratio_list.remove(denominator_name)
+        #ratio_list.remove(denominator_name)
+        ratio_list_len = len(ratio_list)
+        I_mat = np.zeros(( ratio_list_len,1), dtype=np.float32)
+        L_mat = np.zeros(( ratio_list_len,3), dtype=np.float32)
+        print('L_mat shape', L_mat.shape)
+        print('ratio_list len: ',ratio_list_len)
+        print('ratio_list: \n',ratio_list)
         for row in range(self.img_size[0]):
             print('Computing SVD for '+self.dataset_name+' row ', row)
             for col in range(self.img_size[1]):
                 #print('col = ', col)
                 I2 = self.imgs[denominator_idx][row][col]
+                #print ('I2: ',I2)
                 for (i, item) in enumerate(ratio_list):
                     #print('i = ', i, ' item = ', item)
                     #if item != denominator_name:
@@ -84,14 +93,49 @@ class DenominatorFinder():
                         j=i
                     else:
                         j=i+1
+                        j=i
                     I1 = self.imgs[j][row][col]
+                    I_mat[j] = self.imgs[j][row][col]
+                    #print ('I1: ',I1)
                     l1 = self.lightvecs[item]
+                    #print ('l1: ',l1)
+                    L_mat[j] = self.lightvecs[item]
                     self.mat[row][col][i][:]=I1*l2-I2*l1
+                    #print ('I1*l2-I2*l1:\n',I1*l2-I2*l1)
                         #self.mat[row][col][i][1]=I1*l2[1]-I2*l1[1]
                         #self.mat[row][col][i][2]=
-                U,S,V = np.linalg.svd(self.mat[row][col])
-                #print (V.shape)
-                self.normal_mat[row][col] = V[2]
+                L_T = np.transpose(L_mat)
+                LTL = L_T.dot(L_mat)
+                #print('LTL shape: ',LTL.shape)
+                #print('LTL: ',LTL)
+                LTL_inv = np.linalg.inv(LTL)
+                #print('LTL_inv shape: ',LTL_inv.shape)
+                #print('LTL_inv : ',LTL_inv)
+                LTI = L_T.dot(I_mat)
+                #print('LTI shape: ',LTI.shape)
+                #print('LTI : ',LTI)
+                G = LTL_inv.dot(LTI)
+                #print('G: \n',G)
+                kd = np.linalg.norm(G)
+                #print('kd: ',kd)
+                N = G/kd
+                #print('N: ',N)
+                #print('L_mat:\n',L_mat)
+                #print('L_T :\n',L_T)
+                #U,S,V = np.linalg.svd(self.mat[row][col])
+                #self.normal_mat[row][col] = V[2]
+                self.normal_mat[row][col] = N.reshape(3)
+                #print ('self.mat[row][col] shape: ',self.mat[row][col].shape)
+                #print ('self.mat[row][col]: \n',self.mat[row][col])
+                #print ('u shape ',U.shape)
+                #print ('u content:\n ',U)
+                #print ('s shape ',S.shape)
+                #print ('s content:\n ',S)
+                #print ('v shape ',V.shape)
+                #print ('v content:\n',V)
+                #print ('N.reshape   : ', N.reshape(3))
+                #print ('v[2] content: ',V[2])
+                #print ('v[:,2] content:\n',V[:,2])
         #print (self.normal_mat)
         #with open("normal_mat.pickle", "wb") as output_file:
         #    pickle.dump(self.normal_mat, output_file)
