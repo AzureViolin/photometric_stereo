@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import scipy.io
 
 for dataset_num in range(1,2):
-    sample_points_num = 100
+    sample_points_num = 310
     ##==== resample light vectors =====
     lvres_obj = LightVectorResampler(dataset_num)
     lvres_obj.dome(1.0,sample_points_num) # 310 is the magic number here to get 306 sample points

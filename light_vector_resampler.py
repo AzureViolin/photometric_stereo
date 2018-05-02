@@ -15,7 +15,7 @@ class LightVectorResampler():
                 self.dataset_nums.append(row[1])
         #print(self.dataset_names)
         #print(self.dataset_nums)
-        print('=============== current dataset: ',self.dataset_names[dataset_num-2],' ================')
+        print('=============== current dataset: ',self.dataset_names[dataset_num-1],' ================')
         self.x = []
         self.y = []
         self.z = []

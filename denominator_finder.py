@@ -89,9 +89,9 @@ class DenominatorFinder():
                     self.mat[row][col][i][:]=I1*l2-I2*l1
                         #self.mat[row][col][i][1]=I1*l2[1]-I2*l1[1]
                         #self.mat[row][col][i][2]=
-                    U,S,V = np.linalg.svd(self.mat[row][col])
-                    #print (V.shape)
-                    self.normal_mat[row][col] = V[2]
+                U,S,V = np.linalg.svd(self.mat[row][col])
+                #print (V.shape)
+                self.normal_mat[row][col] = V[2]
         #print (self.normal_mat)
         #with open("normal_mat.pickle", "wb") as output_file:
         #    pickle.dump(self.normal_mat, output_file)
