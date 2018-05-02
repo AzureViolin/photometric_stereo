@@ -18,10 +18,11 @@
 
 function normal_projection_plot(normal, len, spacing)
 
+    figure(35);
     lw = 1;  % linewidth
 
   % Subsample the slant and tilt matrices according to the specified spacing
-  s_normal = normal(1:spacing:end, 1:spacing:end,:);
+  s_normal = normal(end:-spacing:1, 1:spacing:end,:);
 
   [s_rows, s_cols,~] = size(s_normal);
 
