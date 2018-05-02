@@ -1,3 +1,4 @@
+data01_tile0 data01
 data02_tile1 data02
 data03_tile2 small
 data04_rope data04

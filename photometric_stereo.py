@@ -5,8 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io
 
-for dataset_num in range(2,11):
-    sample_points_num = 310
+for dataset_num in range(1,2):
+    sample_points_num = 100
     ##==== resample light vectors =====
     lvres_obj = LightVectorResampler(dataset_num)
     lvres_obj.dome(1.0,sample_points_num) # 310 is the magic number here to get 306 sample points
@@ -18,7 +18,7 @@ for dataset_num in range(2,11):
     name_list = np.array(lvres_obj.resampled_points)
     pil_img = Image.open(lvres_obj.dataset_path+'image0001.bmp')
     img_width, img_height = pil_img.size
-    dataset_name = lvres_obj.dataset_names[dataset_num-2]
+    dataset_name = lvres_obj.dataset_names[dataset_num-1]
     df_obj = DenominatorFinder(name_list , lvres_obj.dataset_path, dataset_name, img_size=[img_height,img_width])
     df_obj.load_image()
     idx, name = df_obj.denominatorfind()

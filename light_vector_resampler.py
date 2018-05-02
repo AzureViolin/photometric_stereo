@@ -26,7 +26,7 @@ class LightVectorResampler():
         #for i in range(2,11):
         #self.clear_xyz()
         print('show dataset lightvecs: ', i)
-        i=i-2
+        i=i-1
         self.dataset_path = '../'+self.dataset_names[i]+'/'+self.dataset_nums[i]+'/'
         file_name = self.dataset_path+'lightvec.txt'
         #file_name = './lightvec.txt'
