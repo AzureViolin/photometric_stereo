@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.io
 
-for dataset_num in range(4,5):
+for dataset_num in range(3,4):
     sample_points_num = 310
     ##==== resample light vectors =====
     lvres_obj = LightVectorResampler(dataset_num)
