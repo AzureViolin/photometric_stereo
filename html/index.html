@@ -70,7 +70,7 @@ a {
 
 .container {
 	margin: 0px auto 0px auto;
-	width: 1300px;
+	width: 1700px;
 }
 
 #header {
@@ -80,7 +80,7 @@ a {
 
 #headersub {
 	color: #ccc;
-	width: 960px;
+	width: 1200px;
 	margin: 0px auto 0px auto;
 	padding: 20px 0px 20px 0px;
 }
@@ -144,106 +144,45 @@ display: inline;
 <body>
 <div id="header" >
 <div id="headersub">
-<h1>Hao Zhang & Lei Tai <span style="color: #DE3737">Group 11</span></h1>
+<h1>Hao Zhang & Lei Tai <span style="color: #DE3737">Group 11 </span> Multiple-view modeling</h1>
 </div>
 </div>
 <div class="container">
 
-<h2>Spring 2018 / CS 5421 / Project 4 / Multiple-view modeling</h2>
+<!-- <h0>Spring 2018 / CS 5421 / Project 4 / Multiple-view modeling</h0> -->
 
-<h3>Data 1</h3>
-<img src="./hog_trained.png">
-<h3>Normal N.L</h3>
-<img src="./hog_trained.png">
-<h3>Normal N.L Refined</h3>
-<img src="./hog_trained.png">
+<h2>Data 2</h2>
+<h3>Denominator Image</h3>
+<img src="./deno/data2.bmp" width=400>
+
+<h3>Normal and refined normal N.L Image</h3>
+<ul>
+    <li><img src="./data2_nl.png" width=48%> <img src='./data2_surf.png' width=48%></li>
+    <li><img src="./data2_refine_nl.png" width=48%> <img src='./data2_refine_surf.png' width=48%></li>
+		<!-- <p style="font-size: 14px">Fig. 1 Trained weight W related to the extracted hog feature.</p> -->
+		<p style="font-size: 14px">Normal N.L and Refined Normal N.L</p>
+		<!-- <p style="font-size: 14px">Fig. 2 ROC and PR curves with features.</p> -->
+</ul>
+
 <h3>Reconstructed surface</h3>
-<img src="./hog_trained.png">
-
-<h3>Recstruct Scene 1</h3>
-
-<p>The feature we use for face detection is HOG. We transfer all the images to grayscale and crop images to small pieces with 36x36 and set the HOG size to 3. Two different HOG implementations are explored.
-	UoCTTI with 31 dimmensions and Dalatriggs with 36 dimmensions.
-	Elementray results show that UoCTTI performs a little bit better than DalaTriggs. With UoCTTI, the final feature dimmesion for every sample is 4464(12x12x31).</p>
-<p>Postive features are collected from the Caltech CropFaces datasets with 6713 face samples as the size 36x36.
-	Negtive features are extracted from the randomly cropped samples through the provided 275 non-face scenes. We crop 10000 samples in total from the directory averagely based on the size of every image respetively.</p>
-<!-- <p> 	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolo</p> -->
-
-<h3>Reconstrct </h3>
-<p>The classifier is trained through a linear SVM. w * Ｘ＋b = Y. Where w and b is the trained weight and bias. X is the training sample, Y is the label.</p>
-<P>The trained weight is shown in Figure 1. </P>
-
-<div>
-<img src="./hog_trained.png">
-<p style="font-size: 14px">Fig. 1 Trained weight W related to the extracted hog feature.</p>
-</div>
+<img src="./data2_recon00.png">
 
 
-<h3>Test in multi scale sliding windows</h3>
-<p>To detect the multi scale faces in the test images, we firstly scale the image to 1.17 times of the original and slide the detecter in a 36x36 window along axis X and Y iteratively with a step size 1.
-	The Precision Recall curve and ROC curve are shown belown in Figure 2. We get an average precision as 0.927. The evaluation can be finished in 75s with an intel I7 CPU.</p>
+<h2>Data 5</h2>
+<h3>Denominator Image</h3>
+<img src="./deno/data5.bmp" width=400>
 
-	<ul>
-	    <li><img src="average_precision_927.png"> <img src='cum_fp_recall_927.png'></li>
-			<p style="font-size: 14px">Fig. 2 ROC and PR curves for multi scale sliding windows.</p>
-	</ul>
+<h3>Normal and refined normal N.L Image</h3>
+<ul>
+    <li><img src="./data5_nl.png" width=48%> <img src='./data5_surf.png' width=48%></li>
+    <li><img src="./data5_refine_nl.png" width=48%> <img src='./data5_refine_surf.png' width=48%></li>
+		<!-- <p style="font-size: 14px">Fig. 1 Trained weight W related to the extracted hog feature.</p> -->
+		<p style="font-size: 14px">Normal N.L and Refined Normal N.L</p>
+		<!-- <p style="font-size: 14px">Fig. 2 ROC and PR curves with features.</p> -->
+</ul>
 
-
-
-<h3>Add padding</h3>
-<p>Notice that there are some partial observable faces at the boardering of images, we add some zero paddings for both the training and evaluation data.
-It help us imporve the average precision to 0.939. 	The Precision Recall curve and ROC curve are shown belown in Figure 3. </p>
-<!-- <p> 	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> -->
-
-	<ul>
-	    <li><img src="average_precision_939.png"> <img src='cum_fp_recall_939.png'></li>
-			<!-- <p style="font-size: 14px">Fig. 1 Trained weight W related to the extracted hog feature.</p> -->
-			<p style="font-size: 14px">Fig. 3 ROC and PR curves with padding.</p>
-			<!-- <p style="font-size: 14px">Fig. 2 ROC and PR curves with features.</p> -->
-	</ul>
-
-<h3>Hard negtive mining</h3>
-<p>We also tried hard negtive mining and get more negtive featues samples from the non face datasets. The average precision decreseas a little bit to 0.911.
-The Precision Recall curve and ROC curve are shown belown in Figure 4. But we get way more less false positive in same scenarioss as shown in Figure 5. </p>
-<!-- <p> 	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in rep</p> -->
-
-	<ul>
-	    <li><img src="average_precision_911.png"> <img src='cum_fp_recall_911.png'></li>
-			<!-- <p style="font-size: 14px">Fig. 1 Trained weight W related to the extracted hog feature.</p> -->
-			<p style="font-size: 14px">Fig. 4 ROC and PR curves with hard negtive mining.</p>
-			<!-- <p style="font-size: 14px">Fig. 2 ROC and PR curves with features.</p> -->
-	</ul>
-
-	<ul>
-	    <li><img src="detection_henry.png" width=48%>  <img src='without_detection_henry.png' width=50%></li>
-			<!-- <p style="font-size: 14px">Fig. 1 Trained weight W related to the extracted hog feature.</p> -->
-			<p style="font-size: 14px">Fig. Left with hard negtive mining. Right without hard negtive mining .</p>
-			<!-- <p style="font-size: 14px">Fig. 2 ROC and PR curves with features.</p> -->
-	</ul>
-
-
-<h3>More results</h3>
-
-<table border=1>
-<tr>
-<td>
-<img src="detections_hendrix2.jpg.png" width="24%"/>
-<img src="detections_next.jpg.png"  width="24%"/>
-<img src="detections_torrance.jpg.png" width="24%"/>
-<img src="detections_Argentina.jpg.png" width="24%"/>
-</td>
-</tr>
-
-<tr>
-<td>
-<img src="detections_window.jpg.png" width="24%"/>
-<img src="detections_ysato.jpg.png"  width="24%"/>
-<img src="detections_tress-photo-2.jpg.png" width="24%"/>
-<img src="detections_AC.png" width="24%"/>
-</td>
-</tr>
-
-</table>
+<h3>Reconstructed surface</h3>
+<img src="./data5_recon00.png">
 
 </body>
 </html>
